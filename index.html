@@ -31,7 +31,7 @@ body{
 }
 
 /* ================= 认证模块样式 ================= */
-#auth-overlay {
+#auth-container {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
     background: var(--bg);
@@ -49,56 +49,23 @@ body{
     width: 320px;
     box-sizing: border-box;
 }
-.auth-box h2 {
-    margin-top: 0;
-    color: var(--primary);
-}
+.auth-box h2 { margin-top: 0; color: var(--primary); }
 .auth-box input {
-    width: 100%;
-    padding: 12px;
-    margin: 15px 0;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    box-sizing: border-box;
-    background: var(--bg);
-    color: var(--text);
-    font-size: 16px;
-    outline: none;
+    width: 100%; padding: 12px; margin: 15px 0;
+    border: 1px solid var(--border); border-radius: 8px;
+    box-sizing: border-box; background: var(--bg);
+    color: var(--text); font-size: 16px; outline: none;
     transition: border-color 0.2s;
 }
-.auth-box input:focus {
-    border-color: var(--primary);
-}
-.auth-box button {
-    width: 100%;
-    font-size: 16px;
-    padding: 12px;
-    font-weight: 600;
-}
+.auth-box input:focus { border-color: var(--primary); }
+.auth-box button { width: 100%; font-size: 16px; padding: 12px; font-weight: 600; }
 
 /* ================= 主页面样式 ================= */
-.header{
-    background:var(--card);
-    padding:16px;
-    border-radius:12px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:15px;
-}
+.header{ background:var(--card); padding:16px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; }
+.title{ color:var(--primary); font-size:22px; font-weight:700; }
+.actions{ display:flex; gap:8px; flex-wrap:wrap; }
 
-.title{color:var(--primary);font-size:22px;font-weight:700;}
-
-.actions{display:flex;gap:8px;flex-wrap:wrap;}
-
-button,select{
-    padding:8px 12px;
-    border-radius:8px;
-    border:none;
-    cursor:pointer;
-    font-size: 14px;
-    transition: opacity 0.2s;
-}
+button,select{ padding:8px 12px; border-radius:8px; border:none; cursor:pointer; font-size: 14px; transition: opacity 0.2s; }
 button:hover{ opacity: 0.85; }
 
 .primary{background:var(--primary);color:#fff;}
@@ -108,104 +75,48 @@ button:hover{ opacity: 0.85; }
 .info{background:#8b5cf6;color:#fff;}
 .gray{background:#64748b;color:#fff;}
 
-.week-info{
-    margin:10px 0;
-    font-weight:600;
-}
-
-.day{
-    background:var(--card);
-    margin:10px 0;
-    padding:12px;
-    border-radius:12px;
-    overflow: hidden;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-}
+.week-info{ margin:10px 0; font-weight:600; }
+.day{ background:var(--card); margin:10px 0; padding:12px; border-radius:12px; overflow: hidden; }
+.grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 
 textarea{
-    width:100%;
-    min-height:90px;
-    margin-top:6px;
-    border-radius:8px;
-    border:1px solid var(--border);
-    padding:8px;
-    box-sizing: border-box;
-    font-family: inherit;
+    width:100%; min-height:90px; margin-top:6px; border-radius:8px;
+    border:1px solid var(--border); padding:8px; box-sizing: border-box; font-family: inherit;
 }
 
-.item{
-    padding:8px 12px;
-    border-bottom:1px solid var(--border);
-    cursor:pointer;
-}
-.item:hover{color:var(--primary); background: rgba(22, 119, 255, 0.05);}
-.item.active{
-    background:#1677ff;
-    color:#fff;
-}
+.item{ padding:8px 12px; border-bottom:1px solid var(--border); cursor:pointer; }
+.item:hover{ color:var(--primary); background: rgba(22, 119, 255, 0.05); }
+.item.active{ background:#1677ff; color:#fff; }
 
-.day-content {
-    transition: all 0.3s ease-in-out;
-    max-height: 2000px;
-    opacity: 1;
-}
-.day-content.collapsed {
-    max-height: 0;
-    opacity: 0;
-    margin-top: 0 !important;
-    pointer-events: none;
-}
+.day-content { transition: all 0.3s ease-in-out; max-height: 2000px; opacity: 1; }
+.day-content.collapsed { max-height: 0; opacity: 0; margin-top: 0 !important; pointer-events: none; }
+.fold-btn { transition: transform 0.2s; background: transparent !important; font-size: 10px !important; color: var(--text); padding: 2px 6px !important; opacity: 0.5; }
+.fold-btn.collapsed-icon { transform: rotate(-90deg); }
 
-.fold-btn {
-    transition: transform 0.2s;
-    background: transparent !important;
-    font-size: 10px !important;
-    color: var(--text);
-    padding: 2px 6px !important;
-    opacity: 0.5;
-}
-.fold-btn.collapsed-icon {
-    transform: rotate(-90deg);
-}
-
-.del-icon-btn {
-    width: 20px;
-    height: 20px;
-    line-height: 18px;
-    text-align: center;
-    padding: 0 !important;
-    font-size: 14px !important;
-    background: rgba(239, 68, 68, 0.1) !important;
-    color: #ef4444 !important;
-    border-radius: 4px !important;
-    margin-left: 15px;
-}
+.del-icon-btn { width: 20px; height: 20px; line-height: 18px; text-align: center; padding: 0 !important; font-size: 14px !important; background: rgba(239, 68, 68, 0.1) !important; color: #ef4444 !important; border-radius: 4px !important; margin-left: 15px; }
 .del-icon-btn:hover { background: #ef4444 !important; color: #fff !important; }
 </style>
 </head>
 
 <body>
 
-<!-- ================= 密码验证层 ================= -->
-<div id="auth-overlay">
+<!-- ================= 1. 密码验证区域 (初始DOM中仅包含此内容) ================= -->
+<div id="auth-container">
     <div class="auth-box">
         <h2>🔐 访问验证</h2>
-        <input type="password" id="auth-input" placeholder="请输入密码以解密日志内容" oninput="hideAuthError()">
+        <input type="password" id="auth-input" placeholder="请输入密码解密日志" oninput="hideAuthError()">
         <button class="primary" onclick="checkAuth()">确认进入</button>
         <p id="auth-error" style="color:#ef4444;display:none;margin-top:12px;font-size:14px;margin-bottom:0;">密码错误，请重试</p>
     </div>
 </div>
 
-<!-- ================= 核心工作区 (验证前隐藏) ================= -->
-<div id="main-app" style="display: none;">
+<!-- ================= 2. 占位容器 (验证成功后挂载至此) ================= -->
+<div id="app-container"></div>
+
+<!-- ================= 3. 模板区 (验证前不会被渲染，不存在于真实DOM树) ================= -->
+<template id="app-template">
     <div class="header">
         <div class="title">📘 Work Notebook Pro</div>
-
         <div class="actions">
             <button class="gray" onclick="goThisWeek()">本周</button>
             <button class="success" onclick="archiveWeek()">归档</button>
@@ -222,30 +133,26 @@ textarea{
     <div id="container"></div>
 
     <div id="historyBox" style="display:none;position:fixed;z-index:9999;background:var(--card);color:var(--text);padding:15px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.5);max-height:60vh;overflow-y:auto;min-width:320px;white-space:nowrap;"></div>
-</div>
+</template>
 
 <script>
-/* ================= Auth Logic ================= */
+/* ================= Auth Logic & 动态挂载 ================= */
 function checkAuth() {
     const input = document.getElementById('auth-input').value;
     const now = new Date();
-    // 生成密码: 月份(MM) + 日期(DD) + 0511
+    // 动态密码生成：月份(MM) + 日期(DD) + 0511
     const m = String(now.getMonth() + 1).padStart(2, '0');
     const d = String(now.getDate()).padStart(2, '0');
     const correctPwd = m + d + "0511";
     
     if (input === correctPwd) {
-        // 密码正确，移除遮罩并显示主应用
-        document.getElementById('auth-overlay').style.display = 'none';
-        document.getElementById('main-app').style.display = 'block';
+        // 1. 彻底移除密码验证DOM
+        const authContainer = document.getElementById('auth-container');
+        authContainer.parentNode.removeChild(authContainer); 
         
-        // 触发数据加载和渲染
-        if (!window.__dbOpened) {
-            window.__dbOpened = true;
-            openDB().then(render);
-        }
+        // 2. 动态挂载主应用
+        mountApp();
     } else {
-        // 密码错误，展示提示
         document.getElementById('auth-error').style.display = 'block';
     }
 }
@@ -254,12 +161,22 @@ function hideAuthError() {
     document.getElementById('auth-error').style.display = 'none';
 }
 
-// 绑定回车键事件
+// 监听回车键
 document.getElementById('auth-input').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        checkAuth();
-    }
+    if (e.key === 'Enter') checkAuth();
 });
+
+function mountApp() {
+    // 获取模板内容并深度克隆
+    const template = document.getElementById('app-template');
+    const clone = template.content.cloneNode(true);
+    
+    // 将克隆的节点塞入真实页面占位符中
+    document.getElementById('app-container').appendChild(clone);
+
+    // DOM挂载完毕后，初始化数据库并渲染记事本
+    openDB().then(render);
+}
 
 
 /* ================= Global State ================= */
@@ -278,9 +195,7 @@ function showMessage(msg) {
     el.style.opacity = "1";
     
     if (el._timer) clearTimeout(el._timer);
-    el._timer = setTimeout(() => {
-        el.style.opacity = "0";
-    }, 2000);
+    el._timer = setTimeout(() => { el.style.opacity = "0"; }, 2000);
 }
 
 /* ================= IndexedDB ================= */
@@ -702,8 +617,6 @@ function deleteAllExceptCurrent() {
         render();
     };
 }
-
-// 初始化时不再直接执行 openDB().then(render) ，而是等待验证通过后执行。
 </script>
 </body>
 </html>
