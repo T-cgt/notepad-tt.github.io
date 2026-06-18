@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Work Notebook Pro</title>
+<title>Work Notebook Pro - RichText</title>
 
 <style>
 :root{
@@ -12,6 +12,8 @@
     --text:#333;
     --primary:#1677ff;
     --border:#e8e8e8;
+    --toolbar-bg:#fafafa;
+    --toolbar-hover:#e6f4ff;
 }
 
 [data-theme="dark"]{
@@ -20,6 +22,8 @@
     --text:#e5e7eb;
     --primary:#60a5fa;
     --border:#334155;
+    --toolbar-bg:#1e293b;
+    --toolbar-hover:#334155;
 }
 
 body{
@@ -32,35 +36,22 @@ body{
 
 /* ================= 认证模块样式 ================= */
 #auth-container {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background: var(--bg);
-    z-index: 100000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg);
+    z-index: 100000; display: flex; justify-content: center; align-items: center;
 }
 .auth-box {
-    background: var(--card);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-    text-align: center;
-    width: 320px;
-    box-sizing: border-box;
+    background: var(--card); padding: 30px; border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5); text-align: center; width: 320px; box-sizing: border-box;
 }
 .auth-box h2 { margin-top: 0; color: var(--primary); }
 .auth-box input {
-    width: 100%; padding: 12px; margin: 15px 0;
-    border: 1px solid var(--border); border-radius: 8px;
-    box-sizing: border-box; background: var(--bg);
-    color: var(--text); font-size: 16px; outline: none;
-    transition: border-color 0.2s;
+    width: 100%; padding: 12px; margin: 15px 0; border: 1px solid var(--border); border-radius: 8px;
+    box-sizing: border-box; background: var(--bg); color: var(--text); font-size: 16px; outline: none;
 }
 .auth-box input:focus { border-color: var(--primary); }
 .auth-box button { width: 100%; font-size: 16px; padding: 12px; font-weight: 600; }
 
-/* ================= 主页面样式 ================= */
+/* ================= 主页面结构样式 ================= */
 .header{ background:var(--card); padding:16px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; }
 .title{ color:var(--primary); font-size:22px; font-weight:700; }
 .actions{ display:flex; gap:8px; flex-wrap:wrap; }
@@ -79,16 +70,56 @@ button:hover{ opacity: 0.85; }
 .day{ background:var(--card); margin:10px 0; padding:12px; border-radius:12px; overflow: hidden; }
 .grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 
-textarea{
-    width:100%; min-height:90px; margin-top:6px; border-radius:8px;
-    border:1px solid var(--border); padding:8px; box-sizing: border-box; font-family: inherit;
+/* ================= 富文本编辑器样式 ================= */
+.rich-editor {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 6px;
+    margin-bottom: 25px;
+    background: var(--bg);
 }
+.rich-editor .toolbar {
+    display: flex;
+    gap: 4px;
+    padding: 6px;
+    background: var(--toolbar-bg);
+    border-bottom: 1px solid var(--border);
+}
+.rich-editor .toolbar button {
+    padding: 4px 8px;
+    background: transparent;
+    color: var(--text);
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.rich-editor .toolbar button:hover {
+    background: var(--toolbar-hover);
+}
+.rich-editor .toolbar .divider {
+    width: 1px;
+    background: var(--border);
+    margin: 0 4px;
+}
+.rich-editor .content {
+    min-height: 120px;
+    padding: 10px;
+    color: var(--text);
+    outline: none;
+    line-height: 1.5;
+    word-break: break-all;
+}
+/* 富文本内部样式修复 */
+.rich-editor .content ul, .rich-editor .content ol { padding-left: 20px; margin: 5px 0; }
+.rich-editor .content p { margin: 5px 0; }
 
+/* ================= 其他UI样式 ================= */
 .item{ padding:8px 12px; border-bottom:1px solid var(--border); cursor:pointer; }
 .item:hover{ color:var(--primary); background: rgba(22, 119, 255, 0.05); }
 .item.active{ background:#1677ff; color:#fff; }
 
-.day-content { transition: all 0.3s ease-in-out; max-height: 2000px; opacity: 1; }
+.day-content { transition: all 0.3s ease-in-out; max-height: 3000px; opacity: 1; }
 .day-content.collapsed { max-height: 0; opacity: 0; margin-top: 0 !important; pointer-events: none; }
 .fold-btn { transition: transform 0.2s; background: transparent !important; font-size: 10px !important; color: var(--text); padding: 2px 6px !important; opacity: 0.5; }
 .fold-btn.collapsed-icon { transform: rotate(-90deg); }
@@ -100,7 +131,7 @@ textarea{
 
 <body>
 
-<!-- ================= 1. 密码验证区域 (初始DOM中仅包含此内容) ================= -->
+<!-- ================= 密码验证区域 ================= -->
 <div id="auth-container">
     <div class="auth-box">
         <h2>🔐 访问验证</h2>
@@ -110,10 +141,10 @@ textarea{
     </div>
 </div>
 
-<!-- ================= 2. 占位容器 (验证成功后挂载至此) ================= -->
+<!-- ================= 占位容器 ================= -->
 <div id="app-container"></div>
 
-<!-- ================= 3. 模板区 (验证前不会被渲染，不存在于真实DOM树) ================= -->
+<!-- ================= 模板区 ================= -->
 <template id="app-template">
     <div class="header">
         <div class="title">📘 Work Notebook Pro</div>
@@ -146,43 +177,28 @@ function checkAuth() {
     const correctPwd = m + d + "0511";
     
     if (input === correctPwd) {
-        // 1. 彻底移除密码验证DOM
         const authContainer = document.getElementById('auth-container');
         authContainer.parentNode.removeChild(authContainer); 
-        
-        // 2. 动态挂载主应用
         mountApp();
     } else {
         document.getElementById('auth-error').style.display = 'block';
     }
 }
 
-function hideAuthError() {
-    document.getElementById('auth-error').style.display = 'none';
-}
-
-// 监听回车键
-document.getElementById('auth-input').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') checkAuth();
-});
+function hideAuthError() { document.getElementById('auth-error').style.display = 'none'; }
+document.getElementById('auth-input').addEventListener('keypress', function(e) { if (e.key === 'Enter') checkAuth(); });
 
 function mountApp() {
-    // 获取模板内容并深度克隆
     const template = document.getElementById('app-template');
     const clone = template.content.cloneNode(true);
-    
-    // 将克隆的节点塞入真实页面占位符中
     document.getElementById('app-container').appendChild(clone);
-
-    // DOM挂载完毕后，初始化数据库并渲染记事本
     openDB().then(render);
 }
 
 
-/* ================= Global State ================= */
+/* ================= 全局状态与提示 ================= */
 window.activeArchiveId = null; 
 
-/* ================= Message Feedback ================= */
 function showMessage(msg) {
     let el = document.getElementById("sys-message-toast");
     if (!el) {
@@ -193,7 +209,6 @@ function showMessage(msg) {
     }
     el.innerText = msg;
     el.style.opacity = "1";
-    
     if (el._timer) clearTimeout(el._timer);
     el._timer = setTimeout(() => { el.style.opacity = "0"; }, 2000);
 }
@@ -212,14 +227,11 @@ function openDB(){
                 db.createObjectStore(STORE,{keyPath:"id"});
             }
         };
-        req.onsuccess=e=>{
-            db=e.target.result;
-            r();
-        };
+        req.onsuccess=e=>{ db=e.target.result; r(); };
     });
 }
 
-/* ================= Week System ================= */
+/* ================= 核心周算法 ================= */
 let weekOffset=0;
 let weekMap=[];
 const BASE_MONDAY = new Date(2020, 0, 6); 
@@ -259,12 +271,37 @@ function getCurrentWeekIndex(){
     const today = new Date();
     today.setHours(0,0,0,0);
     const diffTime = today.getTime() - BASE_MONDAY.getTime();
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    const weekIdx = Math.floor(diffDays / 7);
-    return Math.max(0, weekIdx);
+    return Math.max(0, Math.floor(Math.floor(diffTime / (1000 * 60 * 60 * 24)) / 7));
 }
 
-/* ================= Render ================= */
+/* ================= 富文本编辑器命令 ================= */
+function execCmd(command, value = null) {
+    // 阻止按钮点击时让编辑器失去焦点
+    event.preventDefault(); 
+    document.execCommand(command, false, value);
+}
+
+// 封装生成单个编辑器的 HTML 片段
+function genEditorHTML(title, key, icon) {
+    return `
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">${icon} ${title}</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd('bold')" title="加粗">B</button>
+            <button type="button" onclick="execCmd('italic')" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd('underline')" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd('insertUnorderedList')" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd('insertOrderedList')" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd('justifyLeft')" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd('justifyCenter')" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="${key}"></div>
+    </div>`;
+}
+
+/* ================= Render 渲染页面 ================= */
 function render(){
     weekMap=buildYearWeeks();
     if(weekOffset===0 && !window.__initDone){
@@ -289,16 +326,12 @@ function render(){
 
             <div class="grid day-content" id="day-content-${index}" style="gap:30px; margin-top:15px;">
                 <div>
-                    <div style="margin-bottom:8px;font-weight:600;color:var(--primary);">🚀 上午 任务</div>
-                    <textarea style="background:var(--bg);color:var(--text);margin-bottom:25px;min-height:120px;" data-key="${date}-am-task"></textarea>
-                    <div style="margin-bottom:8px;font-weight:600;color:var(--primary);">🌅 上午 Bug</div>
-                    <textarea style="background:var(--bg);color:var(--text);min-height:120px;" data-key="${date}-am-bug"></textarea>
+                    ${genEditorHTML('上午 任务', `${date}-am-task`, '🚀')}
+                    ${genEditorHTML('上午 Bug', `${date}-am-bug`, '🌅')}
                 </div>
                 <div>
-                    <div style="margin-bottom:8px;font-weight:600;color:var(--primary);">🎯 下午 任务</div>
-                    <textarea style="background:var(--bg);color:var(--text);margin-bottom:25px;min-height:120px;" data-key="${date}-pm-task"></textarea>
-                    <div style="margin-bottom:8px;font-weight:600;color:var(--primary);">🌇 下午 Bug</div>
-                    <textarea style="background:var(--bg);color:var(--text);min-height:120px;" data-key="${date}-pm-bug"></textarea>
+                    ${genEditorHTML('下午 任务', `${date}-pm-task`, '🎯')}
+                    ${genEditorHTML('下午 Bug', `${date}-pm-bug`, '🌇')}
                 </div>
             </div>
         </div>`;
@@ -335,7 +368,7 @@ function loadFoldStates() {
     }
 }
 
-/* ================= DB Actions ================= */
+/* ================= 数据库交互 ================= */
 function save(key,value){
     const tx=db.transaction(STORE,"readwrite");
     tx.objectStore(STORE).put({ id:key, value, time:Date.now() });
@@ -345,9 +378,9 @@ function loadWeek(){
     if (window.isViewingArchive) return; 
     const tx=db.transaction(STORE,"readonly");
     const store=tx.objectStore(STORE);
-    document.querySelectorAll("textarea").forEach(t=>{
+    document.querySelectorAll(".rich-editor .content").forEach(t=>{
         const req=store.get(t.dataset.key);
-        req.onsuccess=()=>{ t.value=req.result?req.result.value:""; };
+        req.onsuccess=()=>{ t.innerHTML=req.result ? req.result.value : ""; };
     });
 }
 
@@ -364,8 +397,9 @@ function handleWeekSwitch(oldIndex,newIndex){
 }
 
 function bind(){
-    document.querySelectorAll("textarea").forEach(t=>{
-        t.oninput=()=>save(t.dataset.key,t.value);
+    // 绑定 contenteditable 的事件
+    document.querySelectorAll(".rich-editor .content").forEach(t=>{
+        t.oninput=()=>save(t.dataset.key, t.innerHTML);
         t.onclick=(e)=>e.stopPropagation();
     });
 }
@@ -381,7 +415,7 @@ function goThisWeek(){
     showMessage("已回到本周并恢复数据");
 }
 
-/* ================= Word Export (表格化) ================= */
+/* ================= 导出与导入 ================= */
 function exportWord(){
     const week=weekMap[weekOffset];
     let html="<h2 style='text-align:center;'>工作周报</h2>";
@@ -400,13 +434,14 @@ function exportWord(){
 
     week.forEach(d=>{
         const date=fmt(d);
-        const amTask = document.querySelector(`[data-key="${date}-am-task"]`)?.value.replace(/\n/g, '<br>') || "";
-        const amBug = document.querySelector(`[data-key="${date}-am-bug"]`)?.value.replace(/\n/g, '<br>') || "";
-        const pmTask = document.querySelector(`[data-key="${date}-pm-task"]`)?.value.replace(/\n/g, '<br>') || "";
-        const pmBug = document.querySelector(`[data-key="${date}-pm-bug"]`)?.value.replace(/\n/g, '<br>') || "";
+        // 富文本本身就是 HTML，直接取 innerHTML 即可保留所有格式(列表/加粗等)
+        const amTask = document.querySelector(`[data-key="${date}-am-task"]`)?.innerHTML || "";
+        const amBug = document.querySelector(`[data-key="${date}-am-bug"]`)?.innerHTML || "";
+        const pmTask = document.querySelector(`[data-key="${date}-pm-task"]`)?.innerHTML || "";
+        const pmBug = document.querySelector(`[data-key="${date}-pm-bug"]`)?.innerHTML || "";
 
         html += `<tr>
-            <td align="center"><b>${date}</b></td>
+            <td align="center" valign="middle"><b>${date}</b></td>
             <td valign="top">${amTask}</td>
             <td valign="top">${amBug}</td>
             <td valign="top">${pmTask}</td>
@@ -427,7 +462,6 @@ function exportWord(){
     showMessage("导出成功（表格格式）");
 }
 
-/* ================= Word Import (适配表格) ================= */
 function handleImport(input) {
     const file = input.files[0];
     if (!file) return;
@@ -447,14 +481,11 @@ function handleImport(input) {
                 const dataTypes = ["am-task", "am-bug", "pm-task", "pm-bug"];
                 
                 dataTypes.forEach((type, idx) => {
-                    const cleanVal = cells[idx + 1].innerHTML
-                                     .replace(/<br\s*\/?>/gi, '\n') 
-                                     .replace(/<[^>]*>/g, '')      
-                                     .trim();
-                    
-                    const targetTextarea = document.querySelector(`[data-key="${date}-${type}"]`);
-                    if (targetTextarea) {
-                        targetTextarea.value = cleanVal;
+                    // 直接将 Word 里的 HTML 放进富文本框
+                    const rawHtml = cells[idx + 1].innerHTML.trim();
+                    const targetEditor = document.querySelector(`[data-key="${date}-${type}"]`);
+                    if (targetEditor) {
+                        targetEditor.innerHTML = rawHtml;
                         foundAny = true;
                     }
                 });
@@ -472,7 +503,7 @@ function handleImport(input) {
     reader.readAsText(file);
 }
 
-/* ================= Archive ================= */
+/* ================= 归档与历史 ================= */
 function archiveWeek(){
     const week=weekMap[weekOffset];
     const archive={
@@ -486,12 +517,12 @@ function archiveWeek(){
         const date=fmt(d);
         ["am-task","am-bug","pm-task","pm-bug"].forEach(k=>{
             const el=document.querySelector(`[data-key="${date}-${k}"]`);
-            archive.data[date+"-"+k]=el?el.value:"";
+            archive.data[date+"-"+k]=el ? el.innerHTML : "";
         });
     });
     const tx=db.transaction(STORE,"readwrite");
     tx.objectStore(STORE).put(archive);
-    document.querySelectorAll("textarea").forEach(t=>t.value="");
+    document.querySelectorAll(".rich-editor .content").forEach(t=>t.innerHTML="");
     showMessage("已归档");
 }
 
@@ -500,7 +531,6 @@ function formatArchiveTime(ms) {
     return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
 }
 
-/* ================= History ================= */
 function toggleHistory(){
     const box=document.getElementById("historyBox");
     const btn=document.getElementById("historyBtn");
@@ -574,10 +604,10 @@ function selectArchive(id,el){
             window.isViewingArchive = true;
         }
         setTimeout(() => {
-            document.querySelectorAll("textarea").forEach(t => t.value = "");
+            document.querySelectorAll(".rich-editor .content").forEach(t => t.innerHTML = "");
             Object.keys(archive.data).forEach(k=>{
                 const el=document.querySelector(`[data-key="${k}"]`);
-                if(el) el.value=archive.data[k];
+                if(el) el.innerHTML=archive.data[k];
             });
             window.isViewingArchive = false;
             showMessage("已回显归档数据");
