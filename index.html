@@ -106,9 +106,9 @@ button:hover{ opacity: 0.85; }
     margin: 0 4px;
 }
 .rich-editor .content {
-    min-height: 120px;
-    max-height: 250px; /* 限制最大高度 */
-    overflow-y: auto;  /* 内部滚动条 */
+    height: 280px; /* 绝对固定高度 280px */
+    box-sizing: border-box; /* 确保内边距不会撑开盒子尺寸 */
+    overflow-y: auto;  /* 内部滚动条，超出即滚动 */
     padding: 10px;
     color: var(--text);
     outline: none;
@@ -190,7 +190,6 @@ button:hover{ opacity: 0.85; }
 function checkAuth() {
     const input = document.getElementById('auth-input').value;
     const now = new Date();
-    // 动态密码生成：月份(MM) + 日期(DD) + 0511
     const m = String(now.getMonth() + 1).padStart(2, '0');
     const d = String(now.getDate()).padStart(2, '0');
     const correctPwd = m + d + "0511";
