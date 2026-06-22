@@ -78,6 +78,8 @@ button:hover{ opacity: 0.85; }
     margin-top: 6px;
     margin-bottom: 25px;
     background: var(--bg);
+    display: flex;
+    flex-direction: column;
 }
 .rich-editor .toolbar {
     display: flex;
@@ -85,6 +87,7 @@ button:hover{ opacity: 0.85; }
     padding: 6px;
     background: var(--toolbar-bg);
     border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
 }
 .rich-editor .toolbar button {
     padding: 4px 8px;
@@ -104,15 +107,31 @@ button:hover{ opacity: 0.85; }
 }
 .rich-editor .content {
     min-height: 120px;
+    max-height: 250px; /* 限制最大高度 */
+    overflow-y: auto;  /* 内部滚动条 */
     padding: 10px;
     color: var(--text);
     outline: none;
     line-height: 1.5;
     word-break: break-all;
 }
-/* 富文本内部样式修复 */
+
+/* 修复富文本内部样式 & 限制图片尺寸 */
 .rich-editor .content ul, .rich-editor .content ol { padding-left: 20px; margin: 5px 0; }
 .rich-editor .content p { margin: 5px 0; }
+.rich-editor .content img {
+    max-width: 100%; /* 图片宽度不超过容器 */
+    height: auto;    /* 高度按比例自适应 */
+    display: block;
+    margin: 5px 0;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* 滚动条美化 */
+.rich-editor .content::-webkit-scrollbar { width: 6px; }
+.rich-editor .content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.rich-editor .content::-webkit-scrollbar-track { background: transparent; }
 
 /* ================= 其他UI样式 ================= */
 .item{ padding:8px 12px; border-bottom:1px solid var(--border); cursor:pointer; }
@@ -276,12 +295,10 @@ function getCurrentWeekIndex(){
 
 /* ================= 富文本编辑器命令 ================= */
 function execCmd(command, value = null) {
-    // 阻止按钮点击时让编辑器失去焦点
     event.preventDefault(); 
     document.execCommand(command, false, value);
 }
 
-// 封装生成单个编辑器的 HTML 片段
 function genEditorHTML(title, key, icon) {
     return `
     <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">${icon} ${title}</div>
@@ -397,7 +414,6 @@ function handleWeekSwitch(oldIndex,newIndex){
 }
 
 function bind(){
-    // 绑定 contenteditable 的事件
     document.querySelectorAll(".rich-editor .content").forEach(t=>{
         t.oninput=()=>save(t.dataset.key, t.innerHTML);
         t.onclick=(e)=>e.stopPropagation();
@@ -434,7 +450,6 @@ function exportWord(){
 
     week.forEach(d=>{
         const date=fmt(d);
-        // 富文本本身就是 HTML，直接取 innerHTML 即可保留所有格式(列表/加粗等)
         const amTask = document.querySelector(`[data-key="${date}-am-task"]`)?.innerHTML || "";
         const amBug = document.querySelector(`[data-key="${date}-am-bug"]`)?.innerHTML || "";
         const pmTask = document.querySelector(`[data-key="${date}-pm-task"]`)?.innerHTML || "";
@@ -481,7 +496,6 @@ function handleImport(input) {
                 const dataTypes = ["am-task", "am-bug", "pm-task", "pm-bug"];
                 
                 dataTypes.forEach((type, idx) => {
-                    // 直接将 Word 里的 HTML 放进富文本框
                     const rawHtml = cells[idx + 1].innerHTML.trim();
                     const targetEditor = document.querySelector(`[data-key="${date}-${type}"]`);
                     if (targetEditor) {
