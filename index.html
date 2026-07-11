@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- saved from url=(0121)file:///C:/Users/26355/Documents/Codex/2026-07-11/new-chat-4/outputs/Work%20Notebook%20Pro%20-%20RichText1-optimized.html -->
 <html lang="zh-CN" data-theme="dark"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -175,8 +176,7 @@ function checkAuth() {
     const correctPwd = m + d + "0511";
     
     if (input === correctPwd) {
-        const authContainer = document.getElementById('auth-container');
-        authContainer.parentNode.removeChild(authContainer); 
+        document.getElementById('auth-container').remove();
         mountApp();
     } else {
         document.getElementById('auth-error').style.display = 'block';
@@ -188,9 +188,17 @@ document.getElementById('auth-input').addEventListener('keypress', function(e) {
 
 function mountApp() {
     const template = document.getElementById('app-template');
-    const clone = template.content.cloneNode(true);
-    document.getElementById('app-container').appendChild(clone);
-    openDB().then(render);
+    const appContainer = document.getElementById('app-container');
+    if (!template || !appContainer) {
+        showMessage("页面模板加载失败，请刷新页面重试");
+        return;
+    }
+
+    appContainer.replaceChildren(template.content.cloneNode(true));
+    openDB().then(render).catch(error => {
+        console.error("页面初始化失败：", error);
+        showMessage("页面初始化失败，请刷新页面重试");
+    });
 }
 
 
@@ -217,7 +225,7 @@ const STORE="logs";
 let db;
 
 function openDB(){
-    return new Promise(r=>{
+    return new Promise((resolve, reject)=>{
         const req=indexedDB.open(DB_NAME,1);
         req.onupgradeneeded=e=>{
             db=e.target.result;
@@ -225,7 +233,8 @@ function openDB(){
                 db.createObjectStore(STORE,{keyPath:"id"});
             }
         };
-        req.onsuccess=e=>{ db=e.target.result; r(); };
+        req.onsuccess=e=>{ db=e.target.result; resolve(); };
+        req.onerror=()=>reject(req.error);
     });
 }
 
@@ -233,6 +242,7 @@ function openDB(){
 let weekOffset=0;
 let weekMap=[];
 const BASE_MONDAY = new Date(2020, 0, 6); 
+const EDITOR_TYPES = ["am-task", "am-bug", "pm-task", "pm-bug"];
 
 function buildYearWeeks(){
     const weeks=[];
@@ -273,8 +283,8 @@ function getCurrentWeekIndex(){
 }
 
 /* ================= 富文本编辑器命令 ================= */
-function execCmd(command, value = null) {
-    event.preventDefault(); 
+function execCmd(e, command, value = null) {
+    e.preventDefault();
     document.execCommand(command, false, value);
 }
 
@@ -283,15 +293,15 @@ function genEditorHTML(title, key, icon) {
     <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">${icon} ${title}</div>
     <div class="rich-editor">
         <div class="toolbar" onmousedown="event.preventDefault();">
-            <button type="button" onclick="execCmd('bold')" title="加粗">B</button>
-            <button type="button" onclick="execCmd('italic')" title="斜体" style="font-style:italic;">I</button>
-            <button type="button" onclick="execCmd('underline')" title="下划线" style="text-decoration:underline;">U</button>
+            <button type="button" onclick="execCmd(event, 'bold')" title="加粗">B</button>
+            <button type="button" onclick="execCmd(event, 'italic')" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(event, 'underline')" title="下划线" style="text-decoration:underline;">U</button>
             <span class="divider"></span>
-            <button type="button" onclick="execCmd('insertUnorderedList')" title="无序列表">• 列表</button>
-            <button type="button" onclick="execCmd('insertOrderedList')" title="有序列表">1. 列表</button>
+            <button type="button" onclick="execCmd(event, 'insertUnorderedList')" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(event, 'insertOrderedList')" title="有序列表">1. 列表</button>
             <span class="divider"></span>
-            <button type="button" onclick="execCmd('justifyLeft')" title="左对齐">⫷</button>
-            <button type="button" onclick="execCmd('justifyCenter')" title="居中">☰</button>
+            <button type="button" onclick="execCmd(event, 'justifyLeft')" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(event, 'justifyCenter')" title="居中">☰</button>
         </div>
         <div class="content" contenteditable="true" data-key="${key}"></div>
     </div>`;
@@ -299,7 +309,15 @@ function genEditorHTML(title, key, icon) {
 
 /* ================= Render 渲染页面 ================= */
 function render(){
-    weekMap=buildYearWeeks();
+    const weekInfo = document.getElementById("weekInfo");
+    const container = document.getElementById("container");
+    if (!weekInfo || !container) {
+        console.error("渲染失败：缺少 weekInfo 或 container 节点");
+        showMessage("页面组件未加载，请刷新页面重试");
+        return;
+    }
+
+    if(weekMap.length===0) weekMap=buildYearWeeks();
     if(weekOffset===0 && !window.__initDone){
         weekOffset=getCurrentWeekIndex();
         window.__initDone=true;
@@ -307,7 +325,7 @@ function render(){
     const week=weekMap[weekOffset];
     const curWeekNum = getWeekNumber(week[0]);
 
-    document.getElementById("weekInfo").innerText=
+    weekInfo.innerText=
         `当前周：${week[0].getFullYear()}年 第${curWeekNum}周 (${fmt(week[0])} ~ ${fmt(week[4])})`;
 
     let html="";
@@ -315,7 +333,7 @@ function render(){
         const date=fmt(d);
         html+=`
         <div class="day">
-            <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="toggleDay(this, ${index})">
+            <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="toggleDay(${index})">
                 <b>${date}</b>
                 <button class="gray fold-btn" id="fold-icon-${index}">▼</button>
             </div>
@@ -332,13 +350,13 @@ function render(){
             </div>
         </div>`;
     });
-    document.getElementById("container").innerHTML=html;
+    container.innerHTML=html;
     bind();
     loadWeek();
     loadFoldStates(); 
 }
 
-function toggleDay(header, index) {
+function toggleDay(index) {
     const btn = document.getElementById(`fold-icon-${index}`);
     const content = document.getElementById(`day-content-${index}`);
     const isCollapsed = content.classList.toggle('collapsed');
@@ -380,18 +398,6 @@ function loadWeek(){
     });
 }
 
-function handleWeekSwitch(oldIndex,newIndex){
-    if(oldIndex!==0){
-        const week=weekMap[oldIndex];
-        const tx=db.transaction(STORE,"readwrite");
-        const store=tx.objectStore(STORE);
-        week.forEach(d=>{
-            const date=fmt(d);
-            ["am-task","am-bug","pm-task","pm-bug"].forEach(k=>{ store.delete(date+"-"+k); });
-        });
-    }
-}
-
 function bind(){
     document.querySelectorAll(".rich-editor .content").forEach(t=>{
         t.oninput=()=>save(t.dataset.key, t.innerHTML);
@@ -402,7 +408,6 @@ function bind(){
 function goThisWeek(){
     window.activeArchiveId = null; 
     const newIndex = getCurrentWeekIndex();
-    if (weekOffset !== newIndex) handleWeekSwitch(weekOffset, newIndex);
     weekOffset = newIndex;
     window.isViewingArchive = false;
     window.isViewingImport = false; 
@@ -508,7 +513,7 @@ function archiveWeek(){
     };
     week.forEach(d=>{
         const date=fmt(d);
-        ["am-task","am-bug","pm-task","pm-bug"].forEach(k=>{
+        EDITOR_TYPES.forEach(k=>{
             const el=document.querySelector(`[data-key="${date}-${k}"]`);
             archive.data[date+"-"+k]=el ? el.innerHTML : "";
         });
@@ -625,7 +630,7 @@ function deleteAllExceptCurrent() {
     const keepKeys = new Set();
     weekMap[thisWeekIdx].forEach(d => {
         const date = fmt(d);
-        ["am-task","am-bug","pm-task","pm-bug"].forEach(k => keepKeys.add(date + "-" + k));
+        EDITOR_TYPES.forEach(k => keepKeys.add(date + "-" + k));
     });
     const tx = db.transaction(STORE, "readwrite");
     const store = tx.objectStore(STORE);
@@ -721,6 +726,7 @@ async function extractAndCopy() {
     }
 }
 </script>
+
 
 
 </body></html>
