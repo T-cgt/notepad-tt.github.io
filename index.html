@@ -601,8 +601,7 @@ function resetAuth() {
     document.getElementById('app-container').innerHTML = '';
 }
 
-window.addEventListener('pageshow', function(e) { if (e.persisted) resetAuth(); });
-
+window.addEventListener('pageshow', resetAuth);
 function mountApp() {
     const template = document.getElementById('app-template');
     const clone = template.content.cloneNode(true);
