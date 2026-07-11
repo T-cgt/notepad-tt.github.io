@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- saved from url=(0121)file:///C:/Users/26355/Documents/Codex/2026-07-11/c-users-26355-codex-attachments-26a1c849/outputs/work-notebook-pro.html -->
 <html lang="zh-CN" data-theme="dark"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -151,17 +150,415 @@ button:hover{ opacity: 0.85; }
 <body>
 
 <!-- ================= 密码验证区域 ================= -->
-<div id="auth-container">
-    <div class="auth-box">
-        <h2>🔐 访问验证</h2>
-        <input type="password" id="auth-input" placeholder="请输入密码解密日志" oninput="hideAuthError()">
-        <button class="primary" onclick="checkAuth()">确认进入</button>
-        <p id="auth-error" style="color:#ef4444;display:none;margin-top:12px;font-size:14px;margin-bottom:0;">密码错误，请重试</p>
-    </div>
-</div>
+
 
 <!-- ================= 占位容器 ================= -->
-<div id="app-container"></div>
+<div id="app-container">
+    <div class="header">
+        <div class="title">📘 Work Notebook Pro</div>
+        <div class="actions">
+            <button class="info" onclick="extractAndCopy()">提取复制</button>
+            <button class="gray" onclick="goThisWeek()">本周</button>
+            <button class="success" onclick="archiveWeek()">归档</button>
+            <button class="primary" onclick="toggleHistory()" id="historyBtn">归档记录</button>
+            <button class="warning" onclick="selfClean()">自删</button>
+            <button class="danger" onclick="deleteAllExceptCurrent()">全删</button>
+            <button class="info" onclick="exportWord()">导出Word</button>
+            <button class="primary" onclick="document.getElementById(&#39;wordImporter&#39;).click()">导入Word</button>
+            <input type="file" id="wordImporter" style="display:none" accept=".doc,.docx" onchange="handleImport(this)">
+        </div>
+    </div>
+
+    <div id="weekInfo" class="week-info">当前周：2026年 第28周 (2026-07-06 ~ 2026-07-10)</div>
+    <div id="container">
+        <div class="day">
+            <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="toggleDay(this, 0)">
+                <b>2026-07-06</b>
+                <button class="gray fold-btn" id="fold-icon-0">▼</button>
+            </div>
+
+            <div class="grid day-content" id="day-content-0" style="gap:30px; margin-top:15px;">
+                <div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🚀 上午 任务</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-06-am-task"></div>
+    </div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🌅 上午 Bug</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-06-am-bug"><br></div>
+    </div>
+                </div>
+                <div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🎯 下午 任务</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-06-pm-task"></div>
+    </div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🌇 下午 Bug</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-06-pm-bug"></div>
+    </div>
+                </div>
+            </div>
+        </div>
+        <div class="day">
+            <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="toggleDay(this, 1)">
+                <b>2026-07-07</b>
+                <button class="gray fold-btn" id="fold-icon-1">▼</button>
+            </div>
+
+            <div class="grid day-content" id="day-content-1" style="gap:30px; margin-top:15px;">
+                <div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🚀 上午 任务</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-07-am-task"></div>
+    </div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🌅 上午 Bug</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-07-am-bug"></div>
+    </div>
+                </div>
+                <div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🎯 下午 任务</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-07-pm-task"></div>
+    </div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🌇 下午 Bug</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-07-pm-bug"></div>
+    </div>
+                </div>
+            </div>
+        </div>
+        <div class="day">
+            <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="toggleDay(this, 2)">
+                <b>2026-07-08</b>
+                <button class="gray fold-btn" id="fold-icon-2">▼</button>
+            </div>
+
+            <div class="grid day-content" id="day-content-2" style="gap:30px; margin-top:15px;">
+                <div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🚀 上午 任务</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-08-am-task"></div>
+    </div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🌅 上午 Bug</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-08-am-bug"></div>
+    </div>
+                </div>
+                <div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🎯 下午 任务</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-08-pm-task"></div>
+    </div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🌇 下午 Bug</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-08-pm-bug"></div>
+    </div>
+                </div>
+            </div>
+        </div>
+        <div class="day">
+            <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="toggleDay(this, 3)">
+                <b>2026-07-09</b>
+                <button class="gray fold-btn" id="fold-icon-3">▼</button>
+            </div>
+
+            <div class="grid day-content" id="day-content-3" style="gap:30px; margin-top:15px;">
+                <div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🚀 上午 任务</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-09-am-task"></div>
+    </div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🌅 上午 Bug</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-09-am-bug"></div>
+    </div>
+                </div>
+                <div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🎯 下午 任务</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-09-pm-task"></div>
+    </div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🌇 下午 Bug</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-09-pm-bug"></div>
+    </div>
+                </div>
+            </div>
+        </div>
+        <div class="day">
+            <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="toggleDay(this, 4)">
+                <b>2026-07-10</b>
+                <button class="gray fold-btn" id="fold-icon-4">▼</button>
+            </div>
+
+            <div class="grid day-content" id="day-content-4" style="gap:30px; margin-top:15px;">
+                <div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🚀 上午 任务</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-10-am-task"></div>
+    </div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🌅 上午 Bug</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-10-am-bug"></div>
+    </div>
+                </div>
+                <div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🎯 下午 任务</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-10-pm-task"></div>
+    </div>
+                    
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">🌇 下午 Bug</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd(&#39;bold&#39;)" title="加粗">B</button>
+            <button type="button" onclick="execCmd(&#39;italic&#39;)" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd(&#39;underline&#39;)" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;insertUnorderedList&#39;)" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd(&#39;insertOrderedList&#39;)" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd(&#39;justifyLeft&#39;)" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd(&#39;justifyCenter&#39;)" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="2026-07-10-pm-bug"></div>
+    </div>
+                </div>
+            </div>
+        </div></div>
+
+    <div id="historyBox" style="display:none;position:fixed;z-index:9999;background:var(--card);color:var(--text);padding:15px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.5);max-height:60vh;overflow-y:auto;min-width:320px;white-space:nowrap;"></div>
+</div>
 
 <!-- ================= 模板区 ================= -->
 <template id="app-template"></template>
