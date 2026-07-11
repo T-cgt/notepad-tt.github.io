@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<!-- saved from url=(0121)file:///C:/Users/26355/Documents/Codex/2026-07-11/c-users-26355-codex-attachments-26a1c849/outputs/work-notebook-pro.html -->
+<html lang="zh-CN" data-theme="dark"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work Notebook Pro - RichText</title>
+
+<style>
+:root{
+    --bg:#f5f7fa;
+    --card:#fff;
+    --text:#333;
+    --primary:#1677ff;
+    --border:#e8e8e8;
+    --toolbar-bg:#fafafa;
+    --toolbar-hover:#e6f4ff;
+}
+
+[data-theme="dark"]{
+    --bg:#0f172a;
+    --card:#1e293b;
+    --text:#e5e7eb;
+    --primary:#60a5fa;
+    --border:#334155;
+    --toolbar-bg:#1e293b;
+    --toolbar-hover:#334155;
+}
+
+body{
+    margin:0;
+    padding:20px;
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Microsoft YaHei";
+}
+
+/* ================= 认证模块样式 ================= */
+#auth-container {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg);
+    z-index: 100000; display: flex; justify-content: center; align-items: center;
+}
+.auth-box {
+    background: var(--card); padding: 30px; border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5); text-align: center; width: 320px; box-sizing: border-box;
+}
+.auth-box h2 { margin-top: 0; color: var(--primary); }
+.auth-box input {
+    width: 100%; padding: 12px; margin: 15px 0; border: 1px solid var(--border); border-radius: 8px;
+    box-sizing: border-box; background: var(--bg); color: var(--text); font-size: 16px; outline: none;
+}
+.auth-box input:focus { border-color: var(--primary); }
+.auth-box button { width: 100%; font-size: 16px; padding: 12px; font-weight: 600; }
+
+/* ================= 主页面结构样式 ================= */
+.header{ background:var(--card); padding:16px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; }
+.title{ color:var(--primary); font-size:22px; font-weight:700; }
+.actions{ display:flex; gap:8px; flex-wrap:wrap; }
+
+button,select{ padding:8px 12px; border-radius:8px; border:none; cursor:pointer; font-size: 14px; transition: opacity 0.2s; }
+button:hover{ opacity: 0.85; }
+
+.primary{background:var(--primary);color:#fff;}
+.success{background:#22c55e;color:#fff;}
+.warning{background:#f59e0b;color:#fff;}
+.danger{background:#ef4444;color:#fff;}
+.info{background:#8b5cf6;color:#fff;}
+.gray{background:#64748b;color:#fff;}
+
+.week-info{ margin:10px 0; font-weight:600; }
+.day{ background:var(--card); margin:10px 0; padding:12px; border-radius:12px; overflow: hidden; }
+.grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+/* ================= 富文本编辑器样式 ================= */
+.rich-editor {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 6px;
+    margin-bottom: 25px;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+}
+.rich-editor .toolbar {
+    display: flex;
+    gap: 4px;
+    padding: 6px;
+    background: var(--toolbar-bg);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+}
+.rich-editor .toolbar button {
+    padding: 4px 8px;
+    background: transparent;
+    color: var(--text);
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.rich-editor .toolbar button:hover {
+    background: var(--toolbar-hover);
+}
+.rich-editor .toolbar .divider {
+    width: 1px;
+    background: var(--border);
+    margin: 0 4px;
+}
+.rich-editor .content {
+    height: 280px; /* 绝对固定高度 280px */
+    box-sizing: border-box; /* 确保内边距不会撑开盒子尺寸 */
+    overflow-y: auto;  /* 内部滚动条，超出即滚动 */
+    padding: 10px;
+    color: var(--text);
+    outline: none;
+    line-height: 1.5;
+    word-break: break-all;
+}
+
+/* 修复富文本内部样式 & 限制图片尺寸 */
+.rich-editor .content ul, .rich-editor .content ol { padding-left: 20px; margin: 5px 0; }
+.rich-editor .content p { margin: 5px 0; }
+.rich-editor .content img {
+    max-width: 100%; /* 图片宽度不超过容器 */
+    height: auto;    /* 高度按比例自适应 */
+    display: block;
+    margin: 5px 0;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* 滚动条美化 */
+.rich-editor .content::-webkit-scrollbar { width: 6px; }
+.rich-editor .content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.rich-editor .content::-webkit-scrollbar-track { background: transparent; }
+
+/* ================= 其他UI样式 ================= */
+.item{ padding:8px 12px; border-bottom:1px solid var(--border); cursor:pointer; }
+.item:hover{ color:var(--primary); background: rgba(22, 119, 255, 0.05); }
+.item.active{ background:#1677ff; color:#fff; }
+
+.day-content { transition: all 0.3s ease-in-out; max-height: 3000px; opacity: 1; }
+.day-content.collapsed { max-height: 0; opacity: 0; margin-top: 0 !important; pointer-events: none; }
+.fold-btn { transition: transform 0.2s; background: transparent !important; font-size: 10px !important; color: var(--text); padding: 2px 6px !important; opacity: 0.5; }
+.fold-btn.collapsed-icon { transform: rotate(-90deg); }
+
+.del-icon-btn { width: 20px; height: 20px; line-height: 18px; text-align: center; padding: 0 !important; font-size: 14px !important; background: rgba(239, 68, 68, 0.1) !important; color: #ef4444 !important; border-radius: 4px !important; margin-left: 15px; }
+.del-icon-btn:hover { background: #ef4444 !important; color: #fff !important; }
+</style>
+</head>
+
+<body>
+
+<!-- ================= 密码验证区域 ================= -->
+<div id="auth-container">
+    <div class="auth-box">
+        <h2>🔐 访问验证</h2>
+        <input type="password" id="auth-input" placeholder="请输入密码解密日志" oninput="hideAuthError()">
+        <button class="primary" onclick="checkAuth()">确认进入</button>
+        <p id="auth-error" style="color:#ef4444;display:none;margin-top:12px;font-size:14px;margin-bottom:0;">密码错误，请重试</p>
+    </div>
+</div>
+
+<!-- ================= 占位容器 ================= -->
+<div id="app-container"></div>
+
+<!-- ================= 模板区 ================= -->
+<template id="app-template"></template>
+
+<script>
+/* ================= Auth Logic & 动态挂载 ================= */
+function checkAuth() {
+    const input = document.getElementById('auth-input').value;
+    const now = new Date();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    const correctPwd = m + d + "0511";
+    
+    if (input === correctPwd) {
+        const authContainer = document.getElementById('auth-container');
+        authContainer.parentNode.removeChild(authContainer); 
+        mountApp();
+    } else {
+        document.getElementById('auth-error').style.display = 'block';
+    }
+}
+
+function hideAuthError() { document.getElementById('auth-error').style.display = 'none'; }
+document.getElementById('auth-input').addEventListener('keypress', function(e) { if (e.key === 'Enter') checkAuth(); });
+
+function mountApp() {
+    const template = document.getElementById('app-template');
+    const clone = template.content.cloneNode(true);
+    document.getElementById('app-container').appendChild(clone);
+    openDB().then(render);
+}
+
+
+/* ================= 全局状态与提示 ================= */
+window.activeArchiveId = null; 
+
+function showMessage(msg) {
+    let el = document.getElementById("sys-message-toast");
+    if (!el) {
+        el = document.createElement("div");
+        el.id = "sys-message-toast";
+        el.style.cssText = "position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;padding:10px 20px;border-radius:8px;z-index:10000;box-shadow:0 4px 12px rgba(0,0,0,0.15);transition:opacity 0.3s;pointer-events:none;";
+        document.body.appendChild(el);
+    }
+    el.innerText = msg;
+    el.style.opacity = "1";
+    if (el._timer) clearTimeout(el._timer);
+    el._timer = setTimeout(() => { el.style.opacity = "0"; }, 2000);
+}
+
+/* ================= IndexedDB ================= */
+const DB_NAME="work_pro";
+const STORE="logs";
+let db;
+
+function openDB(){
+    return new Promise(r=>{
+        const req=indexedDB.open(DB_NAME,1);
+        req.onupgradeneeded=e=>{
+            db=e.target.result;
+            if(!db.objectStoreNames.contains(STORE)){
+                db.createObjectStore(STORE,{keyPath:"id"});
+            }
+        };
+        req.onsuccess=e=>{ db=e.target.result; r(); };
+    });
+}
+
+/* ================= 核心周算法 ================= */
+let weekOffset=0;
+let weekMap=[];
+const BASE_MONDAY = new Date(2020, 0, 6); 
+
+function buildYearWeeks(){
+    const weeks=[];
+    const cur=new Date(BASE_MONDAY);
+    for(let i=0;i<1000;i++){
+        const w=[];
+        for(let j=0;j<5;j++){
+            const d=new Date(cur);
+            d.setDate(cur.getDate()+j);
+            w.push(d);
+        }
+        weeks.push(w);
+        cur.setDate(cur.getDate()+7);
+    }
+    return weeks;
+}
+
+function fmt(d){
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+}
+
+function getWeekNumber(d) {
+    const date = new Date(d.getTime());
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+    const week1 = new Date(date.getFullYear(), 0, 4);
+    return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+}
+
+function getCurrentWeekIndex(){
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const diffTime = today.getTime() - BASE_MONDAY.getTime();
+    return Math.max(0, Math.floor(Math.floor(diffTime / (1000 * 60 * 60 * 24)) / 7));
+}
+
+/* ================= 富文本编辑器命令 ================= */
+function execCmd(command, value = null) {
+    event.preventDefault(); 
+    document.execCommand(command, false, value);
+}
+
+function genEditorHTML(title, key, icon) {
+    return `
+    <div style="margin-bottom:4px;font-weight:600;color:var(--primary);">${icon} ${title}</div>
+    <div class="rich-editor">
+        <div class="toolbar" onmousedown="event.preventDefault();">
+            <button type="button" onclick="execCmd('bold')" title="加粗">B</button>
+            <button type="button" onclick="execCmd('italic')" title="斜体" style="font-style:italic;">I</button>
+            <button type="button" onclick="execCmd('underline')" title="下划线" style="text-decoration:underline;">U</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd('insertUnorderedList')" title="无序列表">• 列表</button>
+            <button type="button" onclick="execCmd('insertOrderedList')" title="有序列表">1. 列表</button>
+            <span class="divider"></span>
+            <button type="button" onclick="execCmd('justifyLeft')" title="左对齐">⫷</button>
+            <button type="button" onclick="execCmd('justifyCenter')" title="居中">☰</button>
+        </div>
+        <div class="content" contenteditable="true" data-key="${key}"></div>
+    </div>`;
+}
+
+/* ================= Render 渲染页面 ================= */
+function render(){
+    if(weekMap.length===0) weekMap=buildYearWeeks();
+    if(weekOffset===0 && !window.__initDone){
+        weekOffset=getCurrentWeekIndex();
+        window.__initDone=true;
+    }
+    const week=weekMap[weekOffset];
+    const curWeekNum = getWeekNumber(week[0]);
+
+    document.getElementById("weekInfo").innerText=
+        `当前周：${week[0].getFullYear()}年 第${curWeekNum}周 (${fmt(week[0])} ~ ${fmt(week[4])})`;
+
+    let html="";
+    week.forEach((d, index)=>{
+        const date=fmt(d);
+        html+=`
+        <div class="day">
+            <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="toggleDay(this, ${index})">
+                <b>${date}</b>
+                <button class="gray fold-btn" id="fold-icon-${index}">▼</button>
+            </div>
+
+            <div class="grid day-content" id="day-content-${index}" style="gap:30px; margin-top:15px;">
+                <div>
+                    ${genEditorHTML('上午 任务', `${date}-am-task`, '🚀')}
+                    ${genEditorHTML('上午 Bug', `${date}-am-bug`, '🌅')}
+                </div>
+                <div>
+                    ${genEditorHTML('下午 任务', `${date}-pm-task`, '🎯')}
+                    ${genEditorHTML('下午 Bug', `${date}-pm-bug`, '🌇')}
+                </div>
+            </div>
+        </div>`;
+    });
+    document.getElementById("container").innerHTML=html;
+    bind();
+    loadWeek();
+    loadFoldStates(); 
+}
+
+function toggleDay(header, index) {
+    const btn = document.getElementById(`fold-icon-${index}`);
+    const content = document.getElementById(`day-content-${index}`);
+    const isCollapsed = content.classList.toggle('collapsed');
+    btn.classList.toggle('collapsed-icon', isCollapsed);
+    save(`settings-fold-${index}`, isCollapsed);
+}
+
+function loadFoldStates() {
+    const tx = db.transaction(STORE, "readonly");
+    const store = tx.objectStore(STORE);
+    for(let i=0; i<5; i++) {
+        const req = store.get(`settings-fold-${i}`);
+        req.onsuccess = () => {
+            if(req.result && req.result.value === true) {
+                const content = document.getElementById(`day-content-${i}`);
+                const icon = document.getElementById(`fold-icon-${i}`);
+                if(content && icon){
+                   content.classList.add('collapsed');
+                   icon.classList.add('collapsed-icon');
+                }
+            }
+        };
+    }
+}
+
+/* ================= 数据库交互 ================= */
+function save(key,value){
+    const tx=db.transaction(STORE,"readwrite");
+    tx.objectStore(STORE).put({ id:key, value, time:Date.now() });
+}
+
+function loadWeek(){
+    if (window.isViewingArchive) return; 
+    const tx=db.transaction(STORE,"readonly");
+    const store=tx.objectStore(STORE);
+    document.querySelectorAll(".rich-editor .content").forEach(t=>{
+        const req=store.get(t.dataset.key);
+        req.onsuccess=()=>{ t.innerHTML=req.result ? req.result.value : ""; };
+    });
+}
+
+function handleWeekSwitch(oldIndex,newIndex){
+    if(oldIndex!==0){
+        const week=weekMap[oldIndex];
+        const tx=db.transaction(STORE,"readwrite");
+        const store=tx.objectStore(STORE);
+        week.forEach(d=>{
+            const date=fmt(d);
+            ["am-task","am-bug","pm-task","pm-bug"].forEach(k=>{ store.delete(date+"-"+k); });
+        });
+    }
+}
+
+function bind(){
+    document.querySelectorAll(".rich-editor .content").forEach(t=>{
+        t.oninput=()=>{
+            clearTimeout(t._saveTimer);
+            t._saveTimer=setTimeout(()=>{
+                save(t.dataset.key, t.innerHTML);
+                t._saveTimer=null;
+            }, 200);
+        };
+        t.onblur=()=>{
+            if(!t._saveTimer) return;
+            clearTimeout(t._saveTimer);
+            t._saveTimer=null;
+            save(t.dataset.key, t.innerHTML);
+        };
+        t.onclick=(e)=>e.stopPropagation();
+    });
+}
+
+function goThisWeek(){
+    window.activeArchiveId = null; 
+    const newIndex = getCurrentWeekIndex();
+    if (weekOffset !== newIndex) handleWeekSwitch(weekOffset, newIndex);
+    weekOffset = newIndex;
+    window.isViewingArchive = false;
+    window.isViewingImport = false; 
+    render();
+    showMessage("已回到本周并恢复数据");
+}
+
+/* ================= 导出与导入 ================= */
+async function copyTextToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+    }
+
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.cssText = "position:fixed;left:-9999px;top:0;opacity:0;";
+    document.body.appendChild(textarea);
+    let copied = false;
+    try {
+        textarea.focus();
+        textarea.select();
+        copied = document.execCommand("copy");
+    } finally {
+        textarea.remove();
+    }
+
+    if (!copied) throw new Error("copy failed");
+}
+
+function extractEditorItems(editor) {
+    const separator = "\uE000";
+    const clone = editor.cloneNode(true);
+
+    clone.querySelectorAll("li").forEach(item => {
+        item.insertBefore(document.createTextNode(separator), item.firstChild);
+    });
+
+    const marker = "(?:\\d+[.、)]|[（(]\\d+[）)]|[•·●○▪▫◦‣⁃*])";
+    clone.style.cssText = "position:fixed;left:-99999px;top:0;opacity:0;pointer-events:none;";
+    document.body.appendChild(clone);
+    let rawContent;
+    try {
+        rawContent = clone.innerText;
+    } finally {
+        clone.remove();
+    }
+
+    const content = rawContent
+        .replace(/\u00a0/g, " ")
+        .replace(/\r\n?/g, "\n")
+        .replace(new RegExp(`(^|\\s+)(?=${marker}\\s+)`, "g"), `$1${separator}`)
+        .replace(/(^|\n)\s*(?=-\s+)/g, `$1${separator}`);
+
+    return content
+        .split(separator)
+        .map(text => text
+            .replace(/^(?:\d+[.、)]|[（(]\d+[）)]|[•·●○▪▫◦‣⁃*-])\s*/, "")
+            .replace(/[^\S\n]+/g, " ")
+            .trim()
+        )
+        .filter(Boolean);
+}
+
+async function extractAndCopy() {
+    const contents = Array.from(document.querySelectorAll(".rich-editor .content"))
+        .flatMap(extractEditorItems)
+        .filter(Boolean);
+
+    if (contents.length === 0) {
+        showMessage("没有可复制的文本内容");
+        return;
+    }
+
+    const content = contents
+        .map((text, index) => `${index + 1}. ${text}`)
+        .join("\n");
+
+    try {
+        await copyTextToClipboard(content);
+        showMessage(`已复制 ${contents.length} 条文本内容`);
+    } catch (error) {
+        showMessage("复制失败，请检查浏览器剪切板权限");
+    }
+}
+
+function exportWord(){
+    const week=weekMap[weekOffset];
+    let html="<h2 style='text-align:center;'>工作周报</h2>";
+    
+    html += `<table border="1" cellspacing="0" cellpadding="5" style="border-collapse:collapse; width:100%; font-family: 'Microsoft YaHei';">
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+                <th width="15%">日期</th>
+                <th width="21%">上午任务</th>
+                <th width="21%">上午Bug</th>
+                <th width="21%">下午任务</th>
+                <th width="21%">下午Bug</th>
+            </tr>
+        </thead>
+        <tbody>`;
+
+    week.forEach(d=>{
+        const date=fmt(d);
+        const amTask = document.querySelector(`[data-key="${date}-am-task"]`)?.innerHTML || "";
+        const amBug = document.querySelector(`[data-key="${date}-am-bug"]`)?.innerHTML || "";
+        const pmTask = document.querySelector(`[data-key="${date}-pm-task"]`)?.innerHTML || "";
+        const pmBug = document.querySelector(`[data-key="${date}-pm-bug"]`)?.innerHTML || "";
+
+        html += `<tr>
+            <td align="center" valign="middle"><b>${date}</b></td>
+            <td valign="top">${amTask}</td>
+            <td valign="top">${amBug}</td>
+            <td valign="top">${pmTask}</td>
+            <td valign="top">${pmBug}</td>
+        </tr>`;
+    });
+
+    html += `</tbody></table>`;
+
+    const fullHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'></head><body>${html}</body></html>`;
+    const blob=new Blob([fullHtml],{type:"application/msword;charset=utf-8"});
+    const a=document.createElement("a");
+    const url=URL.createObjectURL(blob);
+    a.href=url;
+    a.download=`周报_${fmt(week[0])}.doc`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url), 0);
+    showMessage("导出成功（表格格式）");
+}
+
+function sanitizeImportedHTML(html) {
+    const template = document.createElement("template");
+    template.innerHTML = html;
+    template.content.querySelectorAll("script,iframe,object,embed").forEach(el=>el.remove());
+    template.content.querySelectorAll("*").forEach(el=>{
+        Array.from(el.attributes).forEach(attr=>{
+            const name = attr.name.toLowerCase();
+            const value = attr.value.trim().toLowerCase();
+            if(name.startsWith("on") || name === "srcdoc" ||
+               (["href","src","xlink:href"].includes(name) && value.startsWith("javascript:"))) {
+                el.removeAttribute(attr.name);
+            }
+        });
+    });
+    return template.innerHTML;
+}
+
+function handleImport(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const content = e.target.result;
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(content, 'text/html');
+        const rows = doc.querySelectorAll('tr');
+        
+        let foundAny = false;
+        rows.forEach((row, i) => {
+            if(i === 0) return;
+            const cells = row.querySelectorAll('td');
+            if(cells.length >= 5) {
+                const date = cells[0].innerText.trim();
+                const dataTypes = ["am-task", "am-bug", "pm-task", "pm-bug"];
+                
+                dataTypes.forEach((type, idx) => {
+                    const rawHtml = sanitizeImportedHTML(cells[idx + 1].innerHTML.trim());
+                    const targetEditor = document.querySelector(`[data-key="${date}-${type}"]`);
+                    if (targetEditor) {
+                        targetEditor.innerHTML = rawHtml;
+                        foundAny = true;
+                    }
+                });
+            }
+        });
+
+        if(foundAny) {
+            window.isViewingImport = true; 
+            showMessage("导入成功并已在当前表格回显（预览模式）");
+        } else {
+            showMessage("导入失败：未找到有效的工作报表数据");
+        }
+        input.value = "";
+    };
+    reader.readAsText(file);
+}
+
+/* ================= 归档与历史 ================= */
+function archiveWeek(){
+    const week=weekMap[weekOffset];
+    const archive={
+        id:"archive_"+fmt(week[0])+"_"+Date.now(),
+        type:"archive",
+        weekIndex: weekOffset,
+        data:{},
+        time:Date.now()
+    };
+    week.forEach(d=>{
+        const date=fmt(d);
+        ["am-task","am-bug","pm-task","pm-bug"].forEach(k=>{
+            const el=document.querySelector(`[data-key="${date}-${k}"]`);
+            archive.data[date+"-"+k]=el ? el.innerHTML : "";
+        });
+    });
+    const tx=db.transaction(STORE,"readwrite");
+    tx.objectStore(STORE).put(archive);
+    document.querySelectorAll(".rich-editor .content").forEach(t=>t.innerHTML="");
+    showMessage("已归档");
+}
+
+function formatArchiveTime(ms) {
+    const d = new Date(ms);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
+function toggleHistory(){
+    const box=document.getElementById("historyBox");
+    const btn=document.getElementById("historyBtn");
+    if(box.style.display==="block"){
+        box.style.display="none";
+        return;
+    }
+    const rect = btn.getBoundingClientRect();
+    box.style.left = (rect.left + rect.width / 2) + "px";
+    box.style.top = (rect.bottom + 10) + "px";
+    box.style.transform = "translateX(-50%)";
+
+    const tx=db.transaction(STORE,"readonly");
+    const store=tx.objectStore(STORE);
+    const req=store.getAll();
+
+    req.onsuccess=()=>{
+        const list=req.result.filter(x=>x.type==="archive").sort((a,b)=>b.time-a.time);
+        if(list.length === 0) {
+            box.innerHTML = `<div style="text-align:center;padding:10px;">暂无归档记录</div>`;
+        } else {
+            box.innerHTML=list.map(i=>{
+                const w = weekMap[i.weekIndex];
+                const year = w ? w[0].getFullYear() : "";
+                const wIdx = w ? getWeekNumber(w[0]) : "?";
+                const isActive = (window.activeArchiveId === i.id) ? "active" : "";
+                return `
+                <div class="item ${isActive}" style="display:flex; justify-content:space-between; align-items:center;" data-id="${i.id}" onclick="selectArchive('${i.id}',this)">
+                    <span>📦 ${year}年 第${wIdx}周 (${formatArchiveTime(i.time)})</span>
+                    <button class="del-icon-btn" onclick="deleteSingleArchive(event, '${i.id}')">✕</button>
+                </div>`;
+            }).join("");
+        }
+        box.style.display="block";
+        showMessage("已打开历史记录");
+    };
+}
+
+function deleteSingleArchive(e, id) {
+    e.stopPropagation();
+    if (!confirm("确定要删除这条归档记录吗？")) return;
+    const tx = db.transaction(STORE, "readwrite");
+    tx.objectStore(STORE).delete(id);
+    tx.oncomplete = () => {
+        showMessage("已删除该归档");
+        if (window.activeArchiveId === id) {
+            window.activeArchiveId = null;
+            weekOffset = getCurrentWeekIndex();
+            window.isViewingArchive = false;
+            render();
+        }
+        document.getElementById("historyBox").style.display = "none";
+        toggleHistory();
+    };
+}
+
+function selectArchive(id,el){
+    window.activeArchiveId = id;
+    document.querySelectorAll(".item").forEach(i=>i.classList.remove("active"));
+    el.classList.add("active");
+    const tx=db.transaction(STORE,"readonly");
+    const store=tx.objectStore(STORE);
+    const req=store.get(id);
+    req.onsuccess=()=>{
+        const archive = req.result;
+        if (archive.weekIndex !== undefined && archive.weekIndex !== weekOffset) {
+            weekOffset = archive.weekIndex;
+            window.isViewingArchive = true;
+            render();
+        } else {
+            window.isViewingArchive = true;
+        }
+        document.querySelectorAll(".rich-editor .content").forEach(t => t.innerHTML = "");
+        Object.keys(archive.data).forEach(k=>{
+            const el=document.querySelector(`[data-key="${k}"]`);
+            if(el) el.innerHTML=archive.data[k];
+        });
+        window.isViewingArchive = false;
+        showMessage("已回显归档数据");
+    };
+}
+
+function selfClean(){
+    const tx=db.transaction(STORE,"readwrite");
+    const store=tx.objectStore(STORE);
+    const req=store.getAll();
+    req.onsuccess=()=>{
+        const limit=Date.now()-4*7*24*60*60*1000;
+        req.result.forEach(i=>{ if(i.time<limit) store.delete(i.id); });
+        showMessage("清理完成");
+    };
+}
+
+function deleteAllExceptCurrent() {
+    if (!confirm("确定要删除除了本周以外的所有数据（包括归档）吗？")) return;
+    const thisWeekIdx = getCurrentWeekIndex();
+    const keepKeys = new Set();
+    weekMap[thisWeekIdx].forEach(d => {
+        const date = fmt(d);
+        ["am-task","am-bug","pm-task","pm-bug"].forEach(k => keepKeys.add(date + "-" + k));
+    });
+    const tx = db.transaction(STORE, "readwrite");
+    const store = tx.objectStore(STORE);
+    store.getAllKeys().onsuccess = (e) => {
+        e.target.result.forEach(key => { if (!keepKeys.has(key)) store.delete(key); });
+    };
+    tx.oncomplete = () => {
+        window.activeArchiveId = null;
+        showMessage("已删除除本周外所有数据");
+        weekOffset = thisWeekIdx;
+        window.isViewingArchive = false;
+        render();
+    };
+}
+</script>
+
+
+</body></html>
